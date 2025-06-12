@@ -8,39 +8,39 @@ import { BASE_URL } from "../utils/constants";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate()
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleNavigate = () => {
-    navigate("/dashboard")
-  }
+    navigate("/dashboard");
+  };
 
   const togglePassword = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try{
-      const response = await axios.post( BASE_URL + "/auth/login", {
-      email,
-      password
-    },
-  {withCredentials: true})
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/auth/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
 
-    navigate("/dashboard")
+      navigate("/dashboard");
 
-    // localStorage.setItem("token", response.data.token)
-
-
-    }catch(err){
-      console.error(err)
+      // localStorage.setItem("token", response.data.token)
+    } catch (err) {
+      console.error(err);
     }
-    
-  }
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-600">
@@ -71,20 +71,24 @@ const Login = () => {
             </label>
             <div className="flex justify-between items-center border  px-2 py-1 rounded">
               <input
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className=" outline-none"
-              placeholder="Password"
-              required
-              
-            />
-            <FontAwesomeIcon onClick={togglePassword} icon={showPassword ? faEyeSlash : faEye}/>
+                type={showPassword ? "text" : "password"}
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className=" outline-none"
+                placeholder="Password"
+                required
+              />
+              <FontAwesomeIcon
+                onClick={togglePassword}
+                icon={showPassword ? faEyeSlash : faEye}
+              />
             </div>
-            
           </div>
-          <button onClick={handleNavigate}   className="bg-blue-500 text-white block w-full mt-2 py-1 rounded">
+          <button
+            onClick={handleNavigate}
+            className="bg-blue-500 text-white block w-full mt-2 py-1 rounded"
+          >
             Sign in
           </button>
         </form>

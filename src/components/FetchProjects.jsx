@@ -21,7 +21,7 @@ const FetchProjects = ({ searchProject }) => {
     // const token = localStorage.getItem("token")
 
     try {
-      const res = await axios.get(BASE_URL + "/projects", {
+      const res = await axios.get(`${BASE_URL}/projects`, {
         withCredentials: true,
       });
       setProjects(res?.data?.projects);
