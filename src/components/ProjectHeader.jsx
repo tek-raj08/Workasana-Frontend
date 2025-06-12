@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useFilterStatus } from '../context/StatusFilterContext';
 import FormProject from './FormProject';
 import { useNavigate } from 'react-router-dom';
-import ProjectFilter from './projectFilter';
+import ProjectFilter from './ProjectFilter';
 import ProjectFormIcon from './ProjectFormIcon';
 
 const ProjectHeader = () => {
