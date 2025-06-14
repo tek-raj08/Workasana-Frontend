@@ -9,9 +9,11 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
 
 
   const togglePassword = () => {
@@ -87,10 +89,8 @@ const Login = () => {
             </div>
           </div>
           
-          <button
-            
-            className="bg-blue-500 text-white block w-full mt-2 py-1 rounded cursor-pointer"
-          >
+          <button className="bg-blue-500 text-white block w-full mt-2 py-1 rounded cursor-pointer" 
+            >
             Sign in
           </button>
         </form>
