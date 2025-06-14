@@ -14,12 +14,12 @@ const Dashboard = () => {
 
   const [searchProject, setSearchProject] = useState("")
   
-  useEffect(() => {
-    if(!sessionStorage.getItem("reloadedAfterLogin")){
-      sessionStorage.setItem("reloadedAfterLogin", "true");
-      window.location.reload()
-    }
-  }, [])
+  // useEffect(() => {
+  //   if(!sessionStorage.getItem("reloadedAfterLogin")){
+  //     sessionStorage.setItem("reloadedAfterLogin", "true");
+  //     window.location.reload()
+  //   }
+  // }, [])
 
   const handleSearch  = (e) => {
     setSearchProject(e.target.value)

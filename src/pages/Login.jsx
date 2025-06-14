@@ -13,17 +13,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleNavigate = () => {
-    navigate("/dashboard");
-  };
-
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    console.log(e.target);
     try {
       const response = await axios.post(
         `${BASE_URL}/auth/login`,
@@ -33,7 +29,7 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-
+      console.log(response);
       navigate("/dashboard");
 
       // localStorage.setItem("token", response.data.token)
@@ -86,7 +82,7 @@ const Login = () => {
             </div>
           </div>
           <button
-            onClick={handleNavigate}
+            type="submit"
             className="bg-blue-500 text-white block w-full mt-2 py-1 rounded"
           >
             Sign in
