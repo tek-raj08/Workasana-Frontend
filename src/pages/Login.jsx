@@ -82,7 +82,7 @@ const Login = () => {
             </div>
           </div>
           <button
-            type="submit"
+          
             className="bg-blue-500 text-white block w-full mt-2 py-1 rounded"
           >
             Sign in
