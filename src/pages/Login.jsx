@@ -88,8 +88,8 @@ const Login = () => {
           </div>
           
           <button
-          
-            className="bg-blue-500 text-white block w-full mt-2 py-1 rounded"
+            
+            className="bg-blue-500 text-white block w-full mt-2 py-1 rounded cursor-pointer"
           >
             Sign in
           </button>
