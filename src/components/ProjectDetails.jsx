@@ -14,7 +14,7 @@ const ProjectDetails = () => {
 
   const project = projects?.find((p) => p._id === projectId);
   const matchedTask = tasks?.filter((t) => t.project.name === project.name);
-  console.log("From Pro-Details:", matchedTask);
+  // console.log("From Pro-Details:", matchedTask);
 
   const [displayedTasks, setDisplayedTasks] = useState(matchedTask || []);
   const [originalTasks, setOriginalTasks] = useState(matchedTask || [])

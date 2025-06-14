@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import { BASE_URL } from "../utils/constants";
+import { authCheck } from "../utils/authCheck";
+import { useNavigate } from "react-router-dom";
 
 const StatusFilterContext = createContext();
 
@@ -12,6 +14,8 @@ export const StatusFilterProvider = ({ children }) => {
   const [tags, setTags] = useState([]);
   const [projectStatus, setProjectStatus] = useState();
   const [taskStatus, setTaskStatus] = useState();
+
+  const navigate = useNavigate()
 
   // const response = await axios.get(BASE_URL + "/projects", {withCredentials: true})
   // console.log("From Context:", response.data)
@@ -75,11 +79,22 @@ export const StatusFilterProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchProject();
-    fetchTasks();
-    fetchTeams();
-    fetchUsers();
-    fetchTags();
+    const fetchAndCheck = async () => {
+      const result = await authCheck();
+
+      if (!result.isAuthenticated){
+        navigate("/")
+        return;
+      } 
+        
+
+      fetchProject();
+      fetchTasks();
+      fetchTeams();
+      fetchUsers();
+      fetchTags();
+    };
+    fetchAndCheck();
   }, []);
 
   return (

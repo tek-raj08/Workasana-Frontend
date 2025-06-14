@@ -10,7 +10,7 @@ const TaskDetails = () => {
   const navigate = useNavigate()
 
   const selectedTask = tasks.find((task) => task._id === taskId);
-  console.log("Selected Task:", selectedTask);
+  // console.log("Selected Task:", selectedTask);
 
     const dueDate = selectedTask?.dueDate ? new Date(selectedTask?.dueDate) : null
     

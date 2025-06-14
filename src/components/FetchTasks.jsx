@@ -20,6 +20,12 @@ const FetchTasks = ({ searchProject }) => {
       });
       setTasks(response?.data?.tasks);
     } catch (error) {
+      if (error?.response?.status === 401) {
+        console.warn("JWT expired. Redirecting to login...");
+
+        navigate("/");
+        // window.location.href = '/login'
+      }
       console.error(error);
     } finally {
       setLoading(false);

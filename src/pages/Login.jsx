@@ -13,13 +13,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e.target);
+ 
     try {
       const response = await axios.post(
         `${BASE_URL}/auth/login`,
@@ -29,12 +30,16 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      console.log(response);
+
       navigate("/dashboard");
 
       // localStorage.setItem("token", response.data.token)
     } catch (err) {
       console.error(err);
+      if(err?.response?.status === 404){
+        
+        alert(err?.response?.data?.message || "Something went wrong.")
+      }
     }
   };
 
@@ -81,6 +86,7 @@ const Login = () => {
               />
             </div>
           </div>
+          
           <button
           
             className="bg-blue-500 text-white block w-full mt-2 py-1 rounded"

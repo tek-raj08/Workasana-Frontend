@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import {BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import {BrowserRouter as Router, Routes, Route, BrowserRouter} from "react-router-dom"
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
@@ -22,8 +22,9 @@ function App() {
   
   return (
     <>
+    <Router>
     <StatusFilterProvider>
-      <Router>
+    
         <Routes>
           <Route path='/' element={<Login/>} />
           <Route path='/dashboard' element={<Dashboard/>} />
@@ -41,9 +42,9 @@ function App() {
           <Route path='/add-member-form/:teamId' element={<AddMemberForm/>}/>
           <Route path='/reports' element={<Report/>}/>
         </Routes>
-        
-      </Router>
+   
       </StatusFilterProvider>
+      </Router>
     </>
   )
 }

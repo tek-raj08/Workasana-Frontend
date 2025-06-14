@@ -17,7 +17,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, Title);
 const TasksClosed = () => {
 
     const {tasks, teams} = useFilterStatus()
-    console.log(tasks)
+    // console.log(tasks)
 
     const closedTasks = tasks?.filter((task) => task.status === "Completed")
 

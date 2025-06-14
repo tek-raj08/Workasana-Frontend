@@ -10,16 +10,16 @@ const TeamDetails = () => {
   const { teamId } = useParams();
 
   const team = teams?.find((t) => t._id === teamId);
-  console.log("selectedTeam:", team);
+  // console.log("selectedTeam:", team);
 
   const taskTeam = tasks?.filter((task) => task.team._id === teamId);
-  console.log("Selected Task:", taskTeam);
+  // console.log("Selected Task:", taskTeam);
 
   const allOwners = taskTeam.flatMap((task) => task.owners);
-  console.log("All Owners:", allOwners);
+  // console.log("All Owners:", allOwners);
 
   const uniqueOwners = [...new Map(allOwners.map((o) => [o._id, o])).values()];
-  console.log("All Unique Owners:", uniqueOwners);
+  // console.log("All Unique Owners:", uniqueOwners);
 
   const handleNavigate = () => {
     navigate("/teams");

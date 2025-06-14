@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFilterStatus } from "../context/StatusFilterContext";
+import { authCheck } from "../utils/authCheck";
 
 const FetchProjects = ({ searchProject }) => {
   const navigate = useNavigate()
@@ -27,10 +28,10 @@ const FetchProjects = ({ searchProject }) => {
       setProjects(res?.data?.projects);
       // {headers: {"Authorization": `Bearer ${token}`}}
     } catch (err) {
-      if (err?.response?.data?.ERROR === "jwt expired") {
+      if (err?.response?.status === 401) {
         console.warn("JWT expired. Redirecting to login...");
 
-        navigate("/login");
+        navigate("/");
         // window.location.href = '/login'
       }
       console.error(err);
