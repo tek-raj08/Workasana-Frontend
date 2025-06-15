@@ -9,15 +9,23 @@ import { faRightLong, faUser } from "@fortawesome/free-solid-svg-icons";
 import { format } from "date-fns";
 
 const ProjectDetails = () => {
-  const { projects, tasks, taskStatus } = useFilterStatus();
+  const { projects, tasks, taskStatus, loading } = useFilterStatus();
   const { projectId } = useParams();
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   const project = projects?.find((p) => p._id === projectId);
   const matchedTask = tasks?.filter((t) => t.project.name === project.name);
   // console.log("From Pro-Details:", matchedTask);
 
   const [displayedTasks, setDisplayedTasks] = useState(matchedTask || []);
-  const [originalTasks, setOriginalTasks] = useState(matchedTask || [])
+  const [originalTasks, setOriginalTasks] = useState(matchedTask || []);
 
   const handleHighLow = () => {
     const sortedBy = { High: 3, Medium: 2, Low: 1 };
@@ -39,26 +47,31 @@ const ProjectDetails = () => {
   };
 
   const handleNewestFirst = () => {
-    const sorted = [...displayedTasks].sort((a,b) => new Date(b.dueDate) - new Date(a.dueDate))
+    const sorted = [...displayedTasks].sort(
+      (a, b) => new Date(b.dueDate) - new Date(a.dueDate)
+    );
 
-    setDisplayedTasks(sorted)
-  }
+    setDisplayedTasks(sorted);
+  };
 
   const handleOldestFirst = () => {
-    const sorted = [...displayedTasks].sort((a,b) => new Date(a.dueDate) - new Date(b.dueDate))
+    const sorted = [...displayedTasks].sort(
+      (a, b) => new Date(a.dueDate) - new Date(b.dueDate)
+    );
 
-    setDisplayedTasks(sorted)
-  }
+    setDisplayedTasks(sorted);
+  };
 
   useEffect(() => {
-    if(!taskStatus || taskStatus===""){
-      setDisplayedTasks(originalTasks)
-    }else{
-      const filtered = originalTasks.filter((task) => task.status === taskStatus)
-      setDisplayedTasks(filtered)
+    if (!taskStatus || taskStatus === "") {
+      setDisplayedTasks(originalTasks);
+    } else {
+      const filtered = originalTasks.filter(
+        (task) => task.status === taskStatus
+      );
+      setDisplayedTasks(filtered);
     }
-  }, [taskStatus, originalTasks])
-
+  }, [taskStatus, originalTasks]);
 
   // console.log("Task High To Low sorted:", displayedTasks);
   // console.log("Task Low To High sorted:", displayedTasks);
@@ -91,7 +104,6 @@ const ProjectDetails = () => {
           <div className="flex justify-between items-center gap-2">
             <h5 className="">Sort by:</h5>
             <div
-
               onClick={handleHighLow}
               className="border border-gray-800 px-2 py-1 rounded-2xl text-gray-600"
             >
@@ -105,17 +117,23 @@ const ProjectDetails = () => {
               <button className="cursor-pointer ">Priority Low-High</button>
             </div>
 
-            <div onClick={handleNewestFirst} className="border border-gray-800 px-2 py-1 rounded-2xl text-gray-600 ">
+            <div
+              onClick={handleNewestFirst}
+              className="border border-gray-800 px-2 py-1 rounded-2xl text-gray-600 "
+            >
               <button className="cursor-pointer ">Newest First</button>
             </div>
 
-            <div onClick={handleOldestFirst} className="border border-gray-800 px-2 py-1 rounded-2xl text-gray-600">
+            <div
+              onClick={handleOldestFirst}
+              className="border border-gray-800 px-2 py-1 rounded-2xl text-gray-600"
+            >
               <button className="cursor-pointer ">Oldest First</button>
             </div>
           </div>
 
           <div className="flex justify-center items-center gap-1">
-            <TaskFilter/>
+            <TaskFilter />
             <TaskFormIcon />
           </div>
         </div>
@@ -123,60 +141,59 @@ const ProjectDetails = () => {
         <div>
           {displayedTasks && displayedTasks.length > 0 ? (
             <table className="table-auto border-collapse border border-gray-300 mt-3 rounded-4xl w-full">
-            <thead className="bg-sky-100 p-1">
-              <tr>
-                <th className="text-left px-3 py-0.5">TASKS</th>
-                <th className="text-left px-3 py-0.5">OWNERS</th>
-                <th className="text-left px-3 py-0.5">PRIORITY</th>
-                <th className="text-left px-3 py-0.5">DUE ON</th>
-                <th className="text-left px-3 py-0.5">STATUS</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayedTasks?.map((task, index) => (
-                <tr key={index}>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {task?.name}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <div className="flex items-center -space-x-1">
-                      <FontAwesomeIcon icon={faUser} />
-                      {task.owners.map((owner, index) => (
-                        <div
-                          key={index}
-                          title={owner.firstName}
-                          className={`w-5 h-5 rounded-full ${getOwnersColor(
-                            owner.firstName
-                          )} text-orange-800 flex items-center justify-center text-xs font-semibold border border-white cursor-pointer`}
-                        >
-                          {owner.firstName.charAt(0).toUpperCase()}
-                        </div>
-                      ))}
-                    </div>
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {task?.priority}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {format(new Date(task?.dueDate), "do MMMM yyyy")}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    {task?.status}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2">
-                    <FontAwesomeIcon icon={faRightLong} />
-                  </td>
+              <thead className="bg-sky-100 p-1">
+                <tr>
+                  <th className="text-left px-3 py-0.5">TASKS</th>
+                  <th className="text-left px-3 py-0.5">OWNERS</th>
+                  <th className="text-left px-3 py-0.5">PRIORITY</th>
+                  <th className="text-left px-3 py-0.5">DUE ON</th>
+                  <th className="text-left px-3 py-0.5">STATUS</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {displayedTasks?.map((task, index) => (
+                  <tr key={index}>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {task?.name}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <div className="flex items-center -space-x-1">
+                        <FontAwesomeIcon icon={faUser} />
+                        {task.owners.map((owner, index) => (
+                          <div
+                            key={index}
+                            title={owner.firstName}
+                            className={`w-5 h-5 rounded-full ${getOwnersColor(
+                              owner.firstName
+                            )} text-orange-800 flex items-center justify-center text-xs font-semibold border border-white cursor-pointer`}
+                          >
+                            {owner.firstName.charAt(0).toUpperCase()}
+                          </div>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {task?.priority}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {format(new Date(task?.dueDate), "do MMMM yyyy")}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {task?.status}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      <FontAwesomeIcon icon={faRightLong} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
             <div className="text-center text-gray-600 mt-6 text-lg font-medium">
               No tasks found for {taskStatus} status.
             </div>
           )}
-          
         </div>
       </div>
     </div>

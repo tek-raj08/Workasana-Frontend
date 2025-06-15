@@ -25,7 +25,15 @@ ChartJS.register(
 );
 
 const PendindWorkChart = () => {
-  const { tasks } = useFilterStatus();
+  const { tasks, loading } = useFilterStatus();
+
+  if(loading){
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
@@ -35,7 +43,7 @@ const PendindWorkChart = () => {
     return createdDate >= oneWeekAgo && task.status !== "Completed";
   });
 
-  console.log("Pending task:", taskFromLastWeek);
+  // console.log("Pending task:", taskFromLastWeek);
 
   const dayCounts = {
     Monday: 0,

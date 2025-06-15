@@ -14,88 +14,81 @@ export const StatusFilterProvider = ({ children }) => {
   const [tags, setTags] = useState([]);
   const [projectStatus, setProjectStatus] = useState();
   const [taskStatus, setTaskStatus] = useState();
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // const response = await axios.get(BASE_URL + "/projects", {withCredentials: true})
   // console.log("From Context:", response.data)
-  const fetchProject = async () => {
-    try {
-      const res = await axios.get(BASE_URL + "/projects", {
-        withCredentials: true,
-      });
-      setProjects(res?.data?.projects);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchTasks = async () => {
-    try {
-      const res = await axios.get(BASE_URL + "/tasks", {
-        withCredentials: true,
-      });
-      setTasks(res?.data?.tasks);
-      // console.log("Task from Context: ", res?.data?.tasks)
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchTeams = async () => {
-    try {
-      const res = await axios.get(BASE_URL + "/teams", {
-        withCredentials: true,
-      });
-      setTeams(res?.data?.teams);
-      // console.log("From COntext:", res?.data?.teams)
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      const res = await axios.get(BASE_URL + "/users", {
-        withCredentials: true,
-      });
-      setOwners(res?.data?.users);
-      // console.log("From COntext users:", res?.data?.users)
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchTags = async () => {
-    try {
-      const res = await axios.get(BASE_URL + "/tags", {
-        withCredentials: true,
-      });
-      setTags(res?.data?.tags);
-      // console.log("From COntext tags:", res?.data?.tags)
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   useEffect(() => {
-    const fetchAndCheck = async () => {
+
+    
+      const fetchAndCheck = async () => {
       const result = await authCheck();
 
-      if (!result.isAuthenticated){
-        navigate("/")
-        return;
-      } 
-        
+      setIsAuthenticated(result.isAuthenticated)
 
-      fetchProject();
-      fetchTasks();
-      fetchTeams();
-      fetchUsers();
-      fetchTags();
+      if (!result.isAuthenticated) {
+        navigate("/");
+        return;
+      }
+
+      
     };
-    fetchAndCheck();
-  }, []);
+    
+    const timer = setTimeout(fetchAndCheck, 300);
+    return () => clearTimeout(timer);
+   
+    
+  }, [])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await Promise.all([
+          axios.get(BASE_URL + "/projects", {
+            withCredentials: true,
+          }),
+
+          axios.get(BASE_URL + "/tasks", {
+            withCredentials: true,
+          }),
+
+          axios.get(BASE_URL + "/teams", {
+            withCredentials: true,
+          }),
+
+          axios.get(BASE_URL + "/users", {
+            withCredentials: true,
+          }),
+
+          axios.get(BASE_URL + "/tags", {
+            withCredentials: true,
+          }),
+        ]);
+        setProjects(res[0]?.data?.projects);
+        setTasks(res[1]?.data?.tasks);
+        setTeams(res[2]?.data?.teams);
+        setOwners(res[3]?.data?.users);
+        setTags(res[4]?.data?.tags);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error loading data: ", err);
+        setLoading(false);
+      }
+    };
+
+      if(isAuthenticated){
+
+        fetchData()
+      }
+    
+    
+
+    
+  }, [isAuthenticated]);
 
   return (
     <StatusFilterContext.Provider
@@ -109,6 +102,7 @@ export const StatusFilterProvider = ({ children }) => {
         owners,
         tags,
         tasks,
+        loading,
       }}
     >
       {children}

@@ -1,62 +1,61 @@
-
-import React from 'react'
-import { Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Title
-} from 'chart.js';
-import { useFilterStatus } from '../context/StatusFilterContext';
+import React from "react";
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
+import { useFilterStatus } from "../context/StatusFilterContext";
 
 // Register chart elements
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
-
 const TasksClosed = () => {
+  const { tasks, teams , loading} = useFilterStatus();
 
-    const {tasks, teams} = useFilterStatus()
-    // console.log(tasks)
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-40">
+        <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  // console.log(tasks)
 
-    const closedTasks = tasks?.filter((task) => task.status === "Completed")
+  const closedTasks = tasks?.filter((task) => task.status === "Completed");
 
-    const teamTaskCount = {}
+  const teamTaskCount = {};
 
-    closedTasks?.forEach((task) => {
-        const teamName = task.team.name || "Unknown"
+  closedTasks?.forEach((task) => {
+    const teamName = task.team.name || "Unknown";
 
-        teamTaskCount[teamName] = (teamTaskCount[teamName] || 0) + 1
-    })
+    teamTaskCount[teamName] = (teamTaskCount[teamName] || 0) + 1;
+  });
 
-    const teamName = Object.keys(teamTaskCount)
-    const teamCount = Object.values(teamTaskCount)
+  const teamName = Object.keys(teamTaskCount);
+  const teamCount = Object.values(teamTaskCount);
 
-     const data = {
+  const data = {
     labels: teamName,
     datasets: [
       {
-        label: 'Tasks Closed',
+        label: "Tasks Closed",
         data: teamCount, // Replace with your real data
         backgroundColor: [
-          'rgba(54, 162, 235, 0.7)',
-          'rgba(255, 206, 86, 0.7)',
-          'rgba(75, 192, 192, 0.7)',
-          'rgba(255, 99, 132, 0.7)'
+          "rgba(54, 162, 235, 0.7)",
+          "rgba(255, 206, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(255, 99, 132, 0.7)",
         ],
-        borderColor: '#fff',
-        borderWidth: 1
-      }
-    ]
+        borderColor: "#fff",
+        borderWidth: 1,
+      },
+    ],
   };
 
   const options = {
     responsive: true,
     plugins: {
-      legend: { position: 'top' },
+      legend: { position: "top" },
       title: {
         display: true,
-        text: 'Tasks Closed by Team',
+        text: "Tasks Closed by Team",
         color: "blue",
 
         padding: {
@@ -68,20 +67,21 @@ const TasksClosed = () => {
           size: 25,
           weight: "bold",
         },
-      }
-    }
+      },
+    },
   };
 
   return (
-    <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-        {teamName.length > 0 ? (
-
-      <Pie data={data} options={options}/>
-        ) : (
-            <p className='text-xl font-bold flex items-center'>No Closed tasks to display.</p>
-        )}
+    <div style={{ maxWidth: "500px", margin: "0 auto" }}>
+      {teamName.length > 0 ? (
+        <Pie data={data} options={options} />
+      ) : (
+        <p className="text-xl font-bold flex items-center">
+          No Closed tasks to display.
+        </p>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default TasksClosed
+export default TasksClosed;
